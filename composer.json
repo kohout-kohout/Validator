@@ -24,12 +24,7 @@
 		"issues": "https://github.com/kdyby/validator/issues"
 	},
 	"require": {
-		"nette/di": "~2.3@dev",
-		"nette/utils": "~2.3@dev",
-
-		"symfony/validator": ">=2.5.3",
-		"kdyby/doctrine-cache": "~2.4@dev",
-		"kdyby/translation": "~2.2@dev"
+		"symfony/validator": ">=2.5.3"
 	},
 	"require-dev": {
 		"kdyby/annotations": "~2.2@dev",

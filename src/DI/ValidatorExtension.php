@@ -46,7 +46,7 @@ class ValidatorExtension extends Nette\DI\CompilerExtension implements ITranslat
 	public function loadConfiguration()
 	{
 		$builder = $this->getContainerBuilder();
-		$config = $this->getConfig($this->defaults);
+		$config = $this->validateConfig($this->defaults);
 
 		$builder->addDefinition($this->prefix('loader'))
 			->setClass('Symfony\Component\Validator\Mapping\Loader\LoaderInterface')
@@ -172,7 +172,7 @@ class ValidatorExtension extends Nette\DI\CompilerExtension implements ITranslat
 	 */
 	private static function filterArgs($statement)
 	{
-		return Compiler::filterArguments([is_string($statement) ? new Nette\DI\Statement($statement) : $statement]);
+		return Nette\DI\Helpers::filterArguments([is_string($statement) ? new Nette\DI\Statement($statement) : $statement]);
 	}
 
 
