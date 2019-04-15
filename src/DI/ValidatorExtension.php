@@ -16,7 +16,7 @@ use Kdyby\Translation\DI\ITranslationProvider;
 use Nette;
 use Nette\DI\Compiler;
 use Nette\Utils\Validators;
-
+use Symfony\Component\Validator\Constraints\Email;
 
 
 /**
@@ -37,8 +37,8 @@ class ValidatorExtension extends Nette\DI\CompilerExtension implements ITranslat
 		'cache' => 'default',
 		'translationDomain' => NULL,
 		'debug' => '%debugMode%',
-		'strictEmail' => NULL, //BC
-        'emailValidationMode' => \Symfony\Component\Validator\Constraints\Email::VALIDATION_MODE_LOOSE,
+		'strictEmail' => NULL,
+		'emailValidationMode' => Email::VALIDATION_MODE_LOOSE,
 	];
 
 
@@ -75,20 +75,21 @@ class ValidatorExtension extends Nette\DI\CompilerExtension implements ITranslat
 
 		$builder->addDefinition($this->prefix('contextFactory'))
 			->setClass('Symfony\Component\Validator\Context\ExecutionContextFactoryInterface')
-			->setFactory('Symfony\Component\Validator\Context\ExecutionContextFactory', ['translationDomain' => $config['translationDomain']]);
+			->setFactory('Symfony\Component\Validator\Context\ExecutionContextFactory', [
+				'translator' => '@Symfony\Component\Translation\TranslatorInterface',
+				'translationDomain' => $config['translationDomain'],
+			]);
 
 		$builder->addDefinition($this->prefix('validator'))
 			->setClass('Symfony\Component\Validator\Validator\ValidatorInterface')
 			->setFactory('Symfony\Component\Validator\Validator\RecursiveValidator');
 
-		//BC
 		if ($config['strictEmail'] !== NULL) {
-		    Validators::assertField($config, 'strictEmail', 'boolean');
-		    trigger_error('`strictEmail` configuration option is deprecated, use `emailValidationMode` instead.', E_USER_DEPRECATED);
-		    $config['emailValidationMode'] = \Symfony\Component\Validator\Constraints\Email::VALIDATION_MODE_LOOSE;
-        }
+			Validators::assertField($config, 'strictEmail', 'boolean');
+			trigger_error('`strictEmail` configuration option is deprecated, use `emailValidationMode` instead.', E_USER_DEPRECATED);;
+		}
 
-        Validators::assertField($config, 'emailValidationMode', 'string');
+		Validators::assertField($config, 'emailValidationMode', 'string');
 
 		$builder->addDefinition($this->prefix('constraint.email'))
 			->setClass('Symfony\Component\Validator\Constraints\EmailValidator')
