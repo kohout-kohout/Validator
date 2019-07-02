@@ -24,7 +24,8 @@
 		"issues": "https://github.com/kdyby/validator/issues"
 	},
 	"require": {
-		"symfony/validator": ">=4.1.0"
+		"symfony/validator": ">=4.1.0",
+		"kdyby/translation": "~2.2@dev"
 	},
 	"require-dev": {
 		"kdyby/annotations": "~2.2@dev",
