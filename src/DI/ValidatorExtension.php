@@ -12,7 +12,7 @@ namespace Kdyby\Validator\DI;
 
 use Kdyby;
 use Kdyby\DoctrineCache\DI\Helpers;
-use Kdyby\Translation\DI\ITranslationProvider;
+use Contributte\Translation\DI\TranslationProviderInterface;
 use Nette;
 use Nette\DI\Compiler;
 use Nette\Utils\Validators;
@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints\Email;
  * @author Filip Procházka <filip@prochazka.su>
  * @author Jáchym Toušek <enumag@gmail.com>
  */
-class ValidatorExtension extends Nette\DI\CompilerExtension implements ITranslationProvider
+class ValidatorExtension extends Nette\DI\CompilerExtension implements TranslationProviderInterface
 {
 
 	const TAG_LOADER = 'kdyby.validator.loader';
@@ -156,7 +156,7 @@ class ValidatorExtension extends Nette\DI\CompilerExtension implements ITranslat
 	 *
 	 * @return string[]
 	 */
-	public function getTranslationResources()
+	public function getTranslationResources(): array
 	{
 		$validatorClass = new \ReflectionClass('Symfony\Component\Validator\Constraint');
 
