@@ -52,17 +52,10 @@ class ValidatorExtension extends Nette\DI\CompilerExtension implements Translati
 			->setClass('Symfony\Component\Validator\Mapping\Loader\LoaderInterface')
 			->setFactory('Symfony\Component\Validator\Mapping\Loader\LoaderChain');
 
-		$cacheService = $builder->addDefinition($this->prefix('cache'))
-			->setClass('Symfony\Component\Validator\Mapping\Cache\CacheInterface');
-
-		$cacheFactory = self::filterArgs($config['cache']);
-		if (class_exists($cacheFactory[0]->getEntity()) && in_array('Symfony\Component\Validator\Mapping\Cache\CacheInterface', class_implements($cacheFactory[0]->getEntity()), TRUE)) {
-			$cacheService->setFactory($cacheFactory[0]->getEntity(), $cacheFactory[0]->arguments);
-		} else {
-			$cacheService->setFactory('Symfony\Component\Validator\Mapping\Cache\DoctrineCache', [
-				Helpers::processCache($this, $config['cache'], 'validator', $config['debug']),
-			]);
-		}
+        $builder->addDefinition($this->prefix('cache'))
+            ->setClass('Nette\Bridges\CacheDI\CacheExtension')
+            ->setArgument('tempDir', '%tempDir%')
+            ->setAutowired(false);
 
 		$builder->addDefinition($this->prefix('metadataFactory'))
 			->setClass('Symfony\Component\Validator\Mapping\Factory\MetadataFactoryInterface')

@@ -12,7 +12,6 @@ namespace Kdyby\Validator\Caching;
 
 use Nette;
 use Nette\Caching\Cache AS NCache;
-use Symfony\Component\Validator\Mapping\Cache\CacheInterface;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 
